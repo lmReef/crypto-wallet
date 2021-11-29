@@ -57,7 +57,7 @@ const Nav = styled.div`
 
 const Navbar = ({ theme }) => {
   return (
-    <Nav>
+    <Nav theme={theme}>
       <div className="nav-items">
         <NavItem theme={theme} title="Home" link="/" />
         <NavItem theme={theme} title="My Profile" link="/profile" />
