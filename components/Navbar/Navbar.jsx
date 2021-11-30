@@ -2,6 +2,8 @@ import styled from 'styled-components';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faLinkedin, faGithubSquare } from '@fortawesome/free-brands-svg-icons';
 import NavItem from './children/NavItem';
+import LoginButton from './children/Login';
+import { theme } from '../../styles/shared';
 
 const Nav = styled.div`
   z-index: 20;
@@ -62,14 +64,15 @@ const Navbar = ({ theme }) => {
         <NavItem theme={theme} title="Profile" link="/profile" />
         <NavItem theme={theme} title="About" link="/about" />
         {/* TODO: add metamask */}
-        {/* <div className="socials">
-          <a href="https://www.linkedin.com/in/reefmatson/" target="_blank">
+        <div className="socials">
+          <LoginButton />
+          {/* <a href="https://www.linkedin.com/in/reefmatson/" target="_blank">
             <FontAwesomeIcon icon={faLinkedin} />
           </a>
           <a href="https://github.com/lmReef" target="_blank">
             <FontAwesomeIcon icon={faGithubSquare} />
-          </a>
-        </div> */}
+          </a> */}
+        </div>
       </div>
     </Nav>
   );
