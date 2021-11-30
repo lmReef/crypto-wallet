@@ -9,8 +9,12 @@ const StyledMainLayout = styled(MainLayout)`
     text-align: center;
   }
 
-  .blockchain-data-div {
+  .blockchain-data-container {
     margin: 4rem;
+
+    .blockchain-data-div {
+      margin-bottom: 3rem;
+    }
 
     .shade {
       opacity: 0.7;
@@ -44,7 +48,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
 
   const getBlockchainData = async () => {
-    setLoading(true);
+    // setLoading(true); // comment this out when developing to save sanity
     const data = await fetch(
       '/api/get-blockchain-data/0x0235C9D8413b4807602468Ed363dfAa8A1c5Cde2',
     ).then((res) => {
@@ -55,24 +59,23 @@ const Profile = () => {
     return data;
   };
 
-  // TODO: cache this stuff somehow
+  // TODO: cache this stuff somehow / store on db and check that first
   useEffect(() => {
     getBlockchainData();
   }, []);
 
   return (
     <StyledMainLayout>
-      <h1>Profile</h1>
-      <div className={`blockchain-data-div ${loading && 'loading'}`}>
+      <div className={`blockchain-data-container ${loading && 'loading'}`}>
         {blockchainData?.map((data) => {
           return (
-            <>
-              <h3 key={data.name}>
+            <div key={data} className="blockchain-data-div">
+              <h3>
                 <a href={data.url} target="_blank" rel="noreferrer">
                   {data.name}
                 </a>
               </h3>
-              <p key={data}>
+              <p>
                 Calculated Value:{' '}
                 <b>
                   {data.holdingsToken} {data.symbol}
@@ -82,7 +85,7 @@ const Profile = () => {
                   / {data.holdingsUSD} <b>USD</b>
                 </span>
               </p>
-            </>
+            </div>
           );
         })}
       </div>

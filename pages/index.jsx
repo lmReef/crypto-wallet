@@ -13,13 +13,6 @@ const StyledMainLayout = styled(MainLayout)`
     @media only screen and (max-width: ${breakpoints.lg}) {
       margin: 2rem auto 0 auto;
     }
-
-    h1 {
-      margin: 0;
-      padding: 0;
-      font-size: 5rem;
-      letter-spacing: 2px;
-    }
   }
 
   .image-container {
@@ -36,12 +29,11 @@ const StyledMainLayout = styled(MainLayout)`
   }
 `;
 
-const Home = ({ theme }) => {
+// TODO: make dashboard page
+const Dashboard = ({ theme }) => {
   return (
     <StyledMainLayout>
-      <div className="heading">
-        <h1>Crypto Wallet Watcher.</h1>
-      </div>
+      <div className="heading">have like coinmarketcap type info here</div>
 
       {/* <div className="image-container">
         <img src={'/images/fang.png'} alt="One of my dogs" />
@@ -50,4 +42,4 @@ const Home = ({ theme }) => {
   );
 };
 
-export default Home;
+export default Dashboard;

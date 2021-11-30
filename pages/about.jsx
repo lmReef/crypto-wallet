@@ -9,11 +9,7 @@ const StyledMainLayout = styled(MainLayout)`
 `;
 
 const About = () => {
-  return (
-    <StyledMainLayout>
-      <h1>About</h1>
-    </StyledMainLayout>
-  );
+  return <StyledMainLayout>{/* <h1>About</h1> */}</StyledMainLayout>;
 };
 
 export default About;

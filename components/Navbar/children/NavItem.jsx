@@ -1,23 +1,29 @@
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const StyledDiv = styled.div`
-  width: fit-content;
+  width: 12rem;
   height: 100%;
 
-  display: flex;
-  flex-grow: 1;
-  justify-content: center;
+  /* display: flex; */
+  /* flex-grow: 1; */
+  /* justify-content: center;
   align-content: center;
-  flex-direction: column;
+  flex-direction: column; */
 
   text-align: center;
-  border-top: 0px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-top: 5px solid transparent;
 
   transition: all 0.2s;
 
   &:hover {
-    border-top: 5px solid ${(props) => props.theme.Secondary};
+    border-bottom: 5px solid ${(props) => props.theme.Secondary};
+    color: ${(props) => props.theme.Primary};
+  }
+  &.active {
+    border-bottom: 5px solid ${(props) => props.theme.Secondary};
     color: ${(props) => props.theme.Primary};
   }
 
@@ -36,8 +42,20 @@ const StyledDiv = styled.div`
 `;
 
 const NavItem = ({ title, link, theme }) => {
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const loc = window.location.toString();
+      const reg = `${link}$`;
+      const regex = new RegExp(reg);
+      setActive(loc.match(regex));
+      // active = loc.match(regex);
+    }
+  }, []);
+
   return (
-    <StyledDiv theme={theme}>
+    <StyledDiv theme={theme} className={`${active && 'active'}`}>
       <Link href={link}>{title}</Link>
     </StyledDiv>
   );

@@ -25,7 +25,6 @@ const Nav = styled.div`
 
   .nav-items {
     display: flex;
-    width: 45%;
     min-width: 480px;
     margin: 0 auto;
 
@@ -59,8 +58,8 @@ const Navbar = ({ theme }) => {
   return (
     <Nav theme={theme}>
       <div className="nav-items">
-        <NavItem theme={theme} title="Home" link="/" />
-        <NavItem theme={theme} title="My Profile" link="/profile" />
+        <NavItem theme={theme} title="Dashboard" link="/" />
+        <NavItem theme={theme} title="Profile" link="/profile" />
         <NavItem theme={theme} title="About" link="/about" />
         {/* <div className="socials">
           <a href="https://www.linkedin.com/in/reefmatson/" target="_blank">
