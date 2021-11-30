@@ -5,6 +5,12 @@ const Wrapper = styled.div`
   color: ${(props) => props.theme.Primary};
   background-color: ${(props) => props.theme.Background};
   min-height: 100vh;
+  overflow-y: scroll;
+
+  main.container {
+    width: 75%;
+    margin: 0 auto;
+  }
 `;
 
 const MainLayout = ({ children, className }) => {
@@ -12,7 +18,7 @@ const MainLayout = ({ children, className }) => {
     <Wrapper className={className} theme={theme}>
       <Navbar theme={theme} />
 
-      <main>{children}</main>
+      <main className="container">{children}</main>
     </Wrapper>
   );
 };
