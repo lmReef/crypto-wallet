@@ -61,6 +61,7 @@ const Navbar = ({ theme }) => {
         <NavItem theme={theme} title="Dashboard" link="/" />
         <NavItem theme={theme} title="Profile" link="/profile" />
         <NavItem theme={theme} title="About" link="/about" />
+        {/* TODO: add metamask */}
         {/* <div className="socials">
           <a href="https://www.linkedin.com/in/reefmatson/" target="_blank">
             <FontAwesomeIcon icon={faLinkedin} />
