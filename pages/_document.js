@@ -21,7 +21,7 @@ export default class MyDocument extends Document {
           <Html>
             {initialProps.styles}
             {sheet.getStyleElement()}
-            <title>cAsset Watcher</title>
+            <title>Crypto Watcher</title>
             <meta name="description" content="Reef's portfolio site" />
             <link rel="icon" href="/favicon.ico" />
             <link

@@ -7,6 +7,9 @@ const handler = async (req, res) => {
 
   // if (address.contains('addr')) scrapedData = getCardanoUrls(address);
 
+  // TODO: maybe call this on every page so it starts loading as soon as you hit the site
+  res.setHeader('Cache-Control', 'public, max-age=900, immutable'); // cache the response for 15 minutes
+  res.setHeader('X-Cache', 'HIT');
   res.status(200).json(await getBlockscanData(address));
 };
 
@@ -38,8 +41,8 @@ const getBlockscanData = async (address) => {
     for (const i in links) {
       const link = links[i].replace('/address/', '/tokenholdings?a=');
       await page.goto(link, { waitUntil: 'networkidle0' });
-      await page.waitForSelector('#HoldingsUSD', { timeout: 10000 });
-      await page.waitForSelector('#HoldingsETH', { timeout: 10000 });
+      await page.waitForSelector('#HoldingsUSD', { timeout: 5000 });
+      await page.waitForSelector('#HoldingsETH', { timeout: 5000 });
 
       const symbol = link.match('eth')
         ? 'ETH'
