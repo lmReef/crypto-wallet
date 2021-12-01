@@ -6,16 +6,15 @@ phases:
       nodejs: latest
   pre_build:
     commands:
-      - echo Running npm ci...
+      - echo [pee] Running npm ci...
       - npm ci
   build:
     commands:
-      - echo Build started on `date`
+      - echo [pee] Build started on `date`
       - npm run build
   post_build:
     commands:
-      - echo Build completed on `date`
-      - tree .next
+      - echo [pee] Build completed on `date`
 artifacts:
   files:
     - .next/**
