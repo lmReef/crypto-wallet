@@ -27,8 +27,8 @@ const StyledMainLayout = styled(MainLayout)`
       right: calc(50% - 3rem);
       width: 6rem;
       height: 6rem;
-      border: 1.1rem solid ${theme.Primary};
-      border-left: 1.1rem solid ${theme.Secondary};
+      border: 1.1rem solid ${theme.Darkish};
+      border-left: 1.1rem solid ${theme.Primary};
       border-radius: 50%;
       animation: load8 1.1s infinite linear;
     }
@@ -67,9 +67,9 @@ const Profile = () => {
   return (
     <StyledMainLayout>
       <div className={`blockchain-data-container ${loading && 'loading'}`}>
-        {blockchainData?.map((data) => {
+        {blockchainData?.map((data, index) => {
           return (
-            <div key={data} className="blockchain-data-div">
+            <div key={index} className="blockchain-data-div">
               <h3>
                 <a href={data.url} target="_blank" rel="noreferrer">
                   {data.name}

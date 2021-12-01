@@ -9,12 +9,12 @@ const Nav = styled.div`
   z-index: 20;
   top: 0;
   width: 100%;
-  height: 7rem;
+  height: 5rem;
   margin: 0;
   display: flex;
   position: sticky;
 
-  background-color: ${(props) => props.theme.Background};
+  background-color: ${(props) => props.theme.Darkest};
 
   font-family: Poppins;
   font-weight: 500;
@@ -49,9 +49,6 @@ const Nav = styled.div`
         width: 2rem;
         margin: 0.2rem;
       }
-      a:hover {
-        color: ${(props) => props.theme.Secondary};
-      }
     }
   }
 `;
@@ -63,7 +60,6 @@ const Navbar = ({ theme }) => {
         <NavItem theme={theme} title="Dashboard" link="/" />
         <NavItem theme={theme} title="Profile" link="/profile" />
         <NavItem theme={theme} title="About" link="/about" />
-        {/* TODO: add metamask */}
         <div className="socials">
           <LoginButton />
           {/* <a href="https://www.linkedin.com/in/reefmatson/" target="_blank">

@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { ethers } from 'ethers';
 
 const StyledButton = styled.button`
-  height: 3rem;
+  height: 2.5rem;
   width: fit-content;
   padding: 0 1rem;
 
@@ -14,13 +14,13 @@ const StyledButton = styled.button`
   align-items: center;
   justify-items: center;
 
-  background-color: ${theme.Secondary};
+  background-color: ${theme.Primary};
   color: ${theme.PrimaryDark};
   cursor: pointer;
 
   letter-spacing: 1px;
 
-  border-radius: 10px;
+  border-radius: 50px;
   border: 0;
 
   transition: all 0.2s ease-out;
@@ -34,19 +34,11 @@ const StyledButton = styled.button`
   }
 `;
 
+let provider;
+let signer;
+
 const LoginButton = () => {
   const [account, setAccount] = useState(null);
-
-  if (typeof window !== 'undefined') {
-    // A Web3Provider wraps a standard Web3 provider, which is
-    // what MetaMask injects as window.ethereum into each page
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-    // The MetaMask plugin also allows signing transactions to
-    // send ether and pay to change state within the blockchain.
-    // For this, you need the account signer...
-    const signer = provider.getSigner();
-  }
 
   const isMetaMaskConnected = async () => {
     const accounts = await provider?.listAccounts();
@@ -55,15 +47,38 @@ const LoginButton = () => {
 
   const handleLogin = async () => {
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    console.log(accounts);
     setAccount(accounts[0]);
-    console.log(account);
     // const balance = await provider.getBalance('ethers.eth');
     // console.log('balance: ', balance);
   };
 
-  const onClick = () => {
+  const handleLogout = async () => {
     console.log(account);
+    // await provider.
   };
+
+  useEffect(() => {
+    // A Web3Provider wraps a standard Web3 provider, which is
+    // what MetaMask injects as window.ethereum into each page
+    if (typeof provider === 'undefined')
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+
+    // The MetaMask plugin also allows signing transactions to
+    // send ether and pay to change state within the blockchain.
+    // For this, you need the account signer...
+    if (typeof signer === 'undefined') signer = provider.getSigner();
+
+    async function checkMeta() {
+      if (await isMetaMaskConnected()) {
+        const accounts = await ethereum.request({
+          method: 'eth_requestAccounts',
+        });
+        setAccount(accounts[0]);
+      }
+    }
+    checkMeta();
+  }, []);
 
   return !account ? (
     <StyledButton onClick={handleLogin} className="metamask">
@@ -71,7 +86,7 @@ const LoginButton = () => {
       <Image src="/metamask.svg" alt="MetaMask" width="20" height="20" />
     </StyledButton>
   ) : (
-    <StyledButton onClick={onClick} className="metamask">
+    <StyledButton onClick={handleLogout} className="metamask">
       {account.slice(0, 8) + '...'}
       <Image src="/metamask.svg" alt="MetaMask" width="20" height="20" />
     </StyledButton>

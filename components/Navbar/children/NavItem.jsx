@@ -13,18 +13,21 @@ const StyledDiv = styled.div`
   flex-direction: column; */
 
   text-align: center;
+  color: ${(props) => props.theme.Lightest};
   border-bottom: 5px solid transparent;
   border-top: 5px solid transparent;
 
   transition: all 0.2s;
 
   &:hover {
-    border-bottom: 5px solid ${(props) => props.theme.Secondary};
-    color: ${(props) => props.theme.Primary};
+    border-bottom: 5px solid ${(props) => props.theme.Primary};
+    /* color: ${(props) => props.theme.Primary}; */
+    border-radius: 5px;
   }
   &.active {
-    border-bottom: 5px solid ${(props) => props.theme.Secondary};
-    color: ${(props) => props.theme.Primary};
+    border-bottom: 5px solid ${(props) => props.theme.Primary};
+    /* color: ${(props) => props.theme.Primary}; */
+    border-radius: 5px;
   }
 
   a {
@@ -36,8 +39,6 @@ const StyledDiv = styled.div`
     justify-content: center;
     align-content: center;
     flex-direction: column;
-
-    color: ${(props) => props.theme.black};
   }
 `;
 

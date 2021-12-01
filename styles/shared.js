@@ -1,10 +1,12 @@
 export const theme = {
-  Background: '#F1F0F2',
-  Contrast: '#292929',
-  Primary: '#003566',
-  PrimaryDark: '#001D3D',
-  Secondary: '#FFC300',
-  Tertiary: '#FFD60A',
+  Darkest: '#101010',
+  Dark: '#161616',
+  Darkish: '#3B2C35',
+  Primary: '#56E39F',
+  Secondary: '#59C9A5',
+  Tertiary: '#3D6969',
+  Lightest: '#E0F5EF',
+  Light: '#afb3bb',
 };
 
 export const breakpoints = {
@@ -21,14 +23,5 @@ export const Light = {
   Primary: '#003566',
   PrimaryDark: '#001D3D',
   Secondary: '#FFC300',
-  Tertiary: '#FFD60A',
-};
-
-export const Dark = {
-  Background: '#292929',
-  Contrast: '#F1F0F2',
-  Primary: '#FFC300',
-  PrimaryDark: '#001D3D',
-  Secondary: '#003566',
   Tertiary: '#FFD60A',
 };
