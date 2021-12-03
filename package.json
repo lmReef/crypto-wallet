@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p $PORT",
+    "deploy-production": "NODE_ENV=production build && NODE_ENV=production start",
     "lint": "next lint"
   },
   "dependencies": {
