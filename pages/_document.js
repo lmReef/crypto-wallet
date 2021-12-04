@@ -22,7 +22,7 @@ export default class MyDocument extends Document {
             {initialProps.styles}
             {sheet.getStyleElement()}
             <title>Crypto Watcher</title>
-            <meta name="description" content="Reef's portfolio site" />
+            <meta name="description" content="Crypto Watcher" />
             <link rel="icon" href="/favicon.ico" />
             <link
               rel="preload"

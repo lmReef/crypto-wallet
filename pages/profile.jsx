@@ -67,27 +67,28 @@ const Profile = () => {
   return (
     <StyledMainLayout>
       <div className={`blockchain-data-container ${loading && 'loading'}`}>
-        {blockchainData?.map((data, index) => {
-          return (
-            <div key={index} className="blockchain-data-div">
-              <h3>
-                <a href={data.url} target="_blank" rel="noreferrer">
-                  {data.name}
-                </a>
-              </h3>
-              <p>
-                Calculated Value:{' '}
-                <b>
-                  {data.holdingsToken} {data.symbol}
-                </b>
-                <span className="shade">
-                  {' '}
-                  / {data.holdingsUSD} <b>USD</b>
-                </span>
-              </p>
-            </div>
-          );
-        })}
+        {blockchainData?.length > 0 &&
+          blockchainData?.map((data, index) => {
+            return (
+              <div key={index} className="blockchain-data-div">
+                <h3>
+                  <a href={data?.url} target="_blank" rel="noreferrer">
+                    {data?.name}
+                  </a>
+                </h3>
+                <p>
+                  Calculated Value:{' '}
+                  <b>
+                    {data?.holdingsToken} {data?.symbol}
+                  </b>
+                  <span className="shade">
+                    {' '}
+                    / {data?.holdingsUSD} <b>USD</b>
+                  </span>
+                </p>
+              </div>
+            );
+          })}
       </div>
     </StyledMainLayout>
   );

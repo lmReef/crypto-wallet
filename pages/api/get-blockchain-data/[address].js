@@ -1,21 +1,98 @@
 const puppeteer = require('puppeteer');
 
+const blockscan_apis = [
+  {
+    name: 'Etherium Network',
+    symbol: 'ETH',
+    baseUrl: 'https://api.etherscan.io/api?',
+    key: 'HEQUT6Y352EHCBX3AV1KTHEXVFKZVPQXE4',
+  },
+  {
+    name: 'Binance Smart Chain',
+    symbol: 'BNB',
+    baseUrl: 'https://api.bscscan.com/api?',
+    key: 'BJJJAAD2DU3I18JRPHAR68CGA1ITNKTNV9',
+  },
+  {
+    name: 'Polygon Network',
+    symbol: 'MATIC',
+    baseUrl: 'https://api.polygonscan.com/api?',
+    key: '8Y7C7SA8WKAPDVXJBUMF287MIA7TB4ZM9Y',
+  },
+  {
+    name: 'Fantom Network',
+    symbol: 'FTM',
+    baseUrl: 'https://api.ftmscan.com/api?',
+    key: '4RVBDP2KPUHJK4T9M8K1EQFPU41PANAHWB',
+  },
+  {
+    name: 'Heco Chain',
+    symbol: 'HT',
+    baseUrl: 'https://api.hecoinfo.com/api?',
+    key: 'HK5NZF388QBAARJHRAHSF59HP5AA9XVRV1',
+  },
+  {
+    name: 'Hoo Smart Chain',
+    symbol: 'HOO',
+    baseUrl: 'https://api.hooscan.com/api?',
+    key: '8VZWTE1Q32D3FDURSE3JKW7W7T8WYTTRUX',
+  },
+];
+const cardano_api_key = '';
+const wei = 1000000000000000000;
+
+// TODO: maybe call this on every page so it starts loading as soon as you hit the site
 const handler = async (req, res) => {
   const { address } = req.query;
   const cardanoscan = 'https://cardanoscan.io/address/';
   const roninchain = 'https://explorer.roninchain.com/address/';
+  let data = {};
+
+  data =
+    (await getBlockchainData(address)) ||
+    // (await scrapeBlockscanData(address)) ||
+    {};
+  // if (data === {}) data = await scrapeBlockscanData(address);
 
   // if (address.contains('addr')) scrapedData = getCardanoUrls(address);
 
-  // TODO: maybe call this on every page so it starts loading as soon as you hit the site
-  res.setHeader('Cache-Control', 'public, max-age=900, immutable'); // cache the response for 15 minutes
-  res.setHeader('X-Cache', 'HIT');
-  res.status(200).json(await getBlockscanData(address));
+  // res.setHeader('Cache-Control', 'public, max-age=900, immutable'); // cache the response for 15 minutes
+  // res.setHeader('X-Cache', 'HIT');
+  res.status(200).json(data);
 };
 
-const getCardanoUrls = async (address) => {};
+const getBlockchainData = async (address) => {
+  const tokenInfo = [];
 
-const getBlockscanData = async (address) => {
+  for (const chain of blockscan_apis) {
+    const { name, symbol, baseUrl, key } = chain;
+    const url = `${baseUrl}module=account&action=balance&address=${address}&tag=latest&apiKey=${key}`;
+    const data = await fetch(url).then((res) => {
+      return res.json();
+    });
+    console.log(name);
+    if (data) {
+      const { status, message } = data;
+      const result = parseInt(data.result, 10);
+
+      if (status === '1' && result > 0)
+        tokenInfo.push({
+          name,
+          symbol,
+          holdingsUSD: 1,
+          holdingsToken: result / wei,
+          data,
+        });
+    }
+  }
+
+  return tokenInfo.length > 0 ? tokenInfo : false;
+};
+
+const getCardanoData = async (address) => {};
+
+const scrapeBlockscanData = async (address) => {
+  console.log('No APIs found, scrapping...');
   const blockscan = 'https://blockscan.com/address/';
 
   // fetch the page
@@ -71,7 +148,7 @@ const getBlockscanData = async (address) => {
     await browser.close(); // make sure the browsers are always closed
   }
 
-  return tokenInfo;
+  return tokenInfo.length > 0 ? tokenInfo : false;
 };
 
 export default handler;

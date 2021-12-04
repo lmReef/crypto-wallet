@@ -41,6 +41,7 @@ const LoginButton = () => {
   const [account, setAccount] = useState(null);
 
   const isMetaMaskConnected = async () => {
+    if (!provider) return false;
     const accounts = await provider?.listAccounts();
     return accounts.length > 0;
   };
@@ -61,13 +62,13 @@ const LoginButton = () => {
   useEffect(() => {
     // A Web3Provider wraps a standard Web3 provider, which is
     // what MetaMask injects as window.ethereum into each page
-    if (typeof provider === 'undefined')
+    if (provider && typeof provider === 'undefined')
       provider = new ethers.providers.Web3Provider(window.ethereum);
 
     // The MetaMask plugin also allows signing transactions to
     // send ether and pay to change state within the blockchain.
     // For this, you need the account signer...
-    if (typeof signer === 'undefined') signer = provider.getSigner();
+    if (signer && typeof signer === 'undefined') signer = provider.getSigner();
 
     async function checkMeta() {
       if (await isMetaMaskConnected()) {
