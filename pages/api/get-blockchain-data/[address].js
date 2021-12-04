@@ -20,6 +20,12 @@ const blockscan_apis = [
     key: '8Y7C7SA8WKAPDVXJBUMF287MIA7TB4ZM9Y',
   },
   {
+    name: 'Avalanche Network',
+    symbol: 'AVAX',
+    baseUrl: 'https://api.snowtrace.io/api?',
+    key: 'GJI118JPVMB69EH7H916H76GZYS3WYCABF',
+  },
+  {
     name: 'Fantom Network',
     symbol: 'FTM',
     baseUrl: 'https://api.ftmscan.com/api?',
