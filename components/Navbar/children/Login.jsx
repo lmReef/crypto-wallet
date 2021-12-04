@@ -40,6 +40,7 @@ let signer;
 
 const LoginButton = () => {
   const [account, setAccount] = useState(false);
+  const [installed, setInstalled] = useState(false);
 
   const isMetaMaskConnected = async () => {
     // if (!provider) return false;
@@ -61,6 +62,11 @@ const LoginButton = () => {
   };
 
   useEffect(() => {
+    if (window?.ethereum) setInstalled(true);
+    else {
+      setInstalled(false);
+      return;
+    }
     // A Web3Provider wraps a standard Web3 provider, which is
     // what MetaMask injects as window.ethereum into each page
     if (!provider && typeof provider === 'undefined')
@@ -69,7 +75,8 @@ const LoginButton = () => {
     // The MetaMask plugin also allows signing transactions to
     // send ether and pay to change state within the blockchain.
     // For this, you need the account signer...
-    if (!signer && typeof signer === 'undefined') signer = provider.getSigner();
+    if (!signer && typeof signer === 'undefined')
+      signer = provider?.getSigner();
 
     async function checkMeta() {
       if (await isMetaMaskConnected()) {
@@ -82,7 +89,7 @@ const LoginButton = () => {
     checkMeta();
   }, []);
 
-  return (
+  return installed ? (
     <StyledButton
       onClick={account ? handleLogout : handleLogin}
       className="metamask"
@@ -90,6 +97,13 @@ const LoginButton = () => {
       {account ? account.slice(0, 8) + '...' : 'Login With MetaMask'}
       <Image src="/metamask.svg" alt="MetaMask" width="20" height="20" />
     </StyledButton>
+  ) : (
+    <a href="https://metamask.io/" target="_blank" rel="noreferrer">
+      <StyledButton className="metamask">
+        Install MetaMask
+        <Image src="/metamask.svg" alt="MetaMask" width="20" height="20" />
+      </StyledButton>
+    </a>
   );
 };
 
