@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MainLayout from '../components/layouts/MainLayout';
 import { theme } from '../styles/shared';
-import Error from '../components/profile/error';
+import Error from '../components/profile/Error';
 
 import { ethers } from 'ethers';
 
