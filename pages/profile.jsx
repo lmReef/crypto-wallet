@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import MainLayout from '../components/layouts/MainLayout';
 import { theme } from '../styles/shared';
 import Error from '../components/profile/Error';
+import RequireMetaMask from '../components/require-metamask';
 
 import { ethers } from 'ethers';
 
@@ -46,6 +47,7 @@ const StyledMainLayout = styled(MainLayout)`
   }
 `;
 
+// TODO: work to abstract out the metamask web3 shit from here
 let provider;
 let signer;
 
@@ -53,6 +55,7 @@ const Profile = () => {
   const [blockchainData, setBlockchainData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [account, setAccount] = useState(false);
+  const [installed, setInstalled] = useState(false);
   const [error, setError] = useState(false);
 
   const getBlockchainData = async (address) => {
@@ -80,13 +83,19 @@ const Profile = () => {
   };
 
   const isMetaMaskConnected = async () => {
-    // if (!provider) return false;
+    if (!provider) return false;
     const accounts = await provider?.listAccounts();
     return accounts.length > 0;
   };
 
   // TODO: cache this stuff somehow / store on db and check that first
   useEffect(() => {
+    if (window?.ethereum) setInstalled(true);
+    else {
+      setInstalled(false);
+      return;
+    }
+
     if (!provider && typeof provider === 'undefined')
       provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -109,31 +118,35 @@ const Profile = () => {
 
   return (
     <StyledMainLayout>
-      <div className={`blockchain-data-container ${loading && 'loading'}`}>
-        {(error && <Error />) ||
-          (blockchainData?.length > 0 &&
-            blockchainData?.map((data, index) => {
-              return (
-                <div key={index} className="blockchain-data-div">
-                  <h3>
-                    <a href={data?.url} target="_blank" rel="noreferrer">
-                      {data?.name}
-                    </a>
-                  </h3>
-                  <p>
-                    Calculated Value:{' '}
-                    <b>
-                      {data?.holdingsToken} {data?.symbol}
-                    </b>
-                    <span className="shade">
-                      {' '}
-                      / {data?.holdingsUSD} <b>USD</b>
-                    </span>
-                  </p>
-                </div>
-              );
-            }))}
-      </div>
+      {!installed ? (
+        <RequireMetaMask />
+      ) : (
+        <div className={`blockchain-data-container ${loading && 'loading'}`}>
+          {(error && <Error />) ||
+            (blockchainData?.length > 0 &&
+              blockchainData?.map((data, index) => {
+                return (
+                  <div key={index} className="blockchain-data-div">
+                    <h3>
+                      <a href={data?.url} target="_blank" rel="noreferrer">
+                        {data?.name}
+                      </a>
+                    </h3>
+                    <p>
+                      Calculated Value:{' '}
+                      <b>
+                        {data?.holdingsToken} {data?.symbol}
+                      </b>
+                      <span className="shade">
+                        {' '}
+                        / {data?.holdingsUSD} <b>USD</b>
+                      </span>
+                    </p>
+                  </div>
+                );
+              }))}
+        </div>
+      )}
     </StyledMainLayout>
   );
 };
