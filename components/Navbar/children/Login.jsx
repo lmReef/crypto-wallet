@@ -8,6 +8,7 @@ import { ethers } from 'ethers';
 const StyledButton = styled.button`
   height: 2.5rem;
   width: fit-content;
+  min-width: 8rem;
   padding: 0 1rem;
 
   display: flex;
@@ -38,10 +39,10 @@ let provider;
 let signer;
 
 const LoginButton = () => {
-  const [account, setAccount] = useState(null);
+  const [account, setAccount] = useState(false);
 
   const isMetaMaskConnected = async () => {
-    if (!provider) return false;
+    // if (!provider) return false;
     const accounts = await provider?.listAccounts();
     return accounts.length > 0;
   };
@@ -62,13 +63,13 @@ const LoginButton = () => {
   useEffect(() => {
     // A Web3Provider wraps a standard Web3 provider, which is
     // what MetaMask injects as window.ethereum into each page
-    if (provider && typeof provider === 'undefined')
+    if (!provider && typeof provider === 'undefined')
       provider = new ethers.providers.Web3Provider(window.ethereum);
 
     // The MetaMask plugin also allows signing transactions to
     // send ether and pay to change state within the blockchain.
     // For this, you need the account signer...
-    if (signer && typeof signer === 'undefined') signer = provider.getSigner();
+    if (!signer && typeof signer === 'undefined') signer = provider.getSigner();
 
     async function checkMeta() {
       if (await isMetaMaskConnected()) {
@@ -81,14 +82,12 @@ const LoginButton = () => {
     checkMeta();
   }, []);
 
-  return !account ? (
-    <StyledButton onClick={handleLogin} className="metamask">
-      Login With MetaMask
-      <Image src="/metamask.svg" alt="MetaMask" width="20" height="20" />
-    </StyledButton>
-  ) : (
-    <StyledButton onClick={handleLogout} className="metamask">
-      {account.slice(0, 8) + '...'}
+  return (
+    <StyledButton
+      onClick={account ? handleLogout : handleLogin}
+      className="metamask"
+    >
+      {account ? account.slice(0, 8) + '...' : 'Login With MetaMask'}
       <Image src="/metamask.svg" alt="MetaMask" width="20" height="20" />
     </StyledButton>
   );

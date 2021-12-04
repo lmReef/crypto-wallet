@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MainLayout from '../components/layouts/MainLayout';
 import { theme } from '../styles/shared';
+import Error from '../components/profile/error';
+
+import { ethers } from 'ethers';
 
 const StyledMainLayout = styled(MainLayout)`
   h1 {
@@ -43,52 +46,93 @@ const StyledMainLayout = styled(MainLayout)`
   }
 `;
 
+let provider;
+let signer;
+
 const Profile = () => {
   const [blockchainData, setBlockchainData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [account, setAccount] = useState(false);
+  const [error, setError] = useState(false);
 
-  const getBlockchainData = async () => {
-    // setLoading(true); // comment this out when developing to save sanity
-    const data = await fetch(
-      '/api/get-blockchain-data/0x0235C9D8413b4807602468Ed363dfAa8A1c5Cde2',
-    ).then((res) => {
-      setLoading(false);
-      return res.json();
-    });
+  const getBlockchainData = async (address) => {
+    if (!address) return;
+    console.log('Address:', address);
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+    const data = await fetch(`/api/get-blockchain-data/${address}`, {
+      signal: controller.signal,
+    })
+      .then((res) => {
+        setLoading(false);
+        return res.json();
+      })
+      .catch((e) => {
+        console.log(e);
+        setLoading(false);
+        setError(true);
+      });
+
     setBlockchainData(data);
     return data;
   };
 
+  const isMetaMaskConnected = async () => {
+    // if (!provider) return false;
+    const accounts = await provider?.listAccounts();
+    return accounts.length > 0;
+  };
+
   // TODO: cache this stuff somehow / store on db and check that first
   useEffect(() => {
-    getBlockchainData();
+    if (!provider && typeof provider === 'undefined')
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+
+    if (!signer && typeof signer === 'undefined') signer = provider.getSigner();
+
+    async function checkMeta() {
+      if (isMetaMaskConnected()) {
+        const accounts = await ethereum.request({
+          method: 'eth_requestAccounts',
+        });
+        setAccount(accounts[0]);
+      }
+    }
+    checkMeta();
   }, []);
+
+  useEffect(() => {
+    getBlockchainData(account);
+  }, [account]);
 
   return (
     <StyledMainLayout>
       <div className={`blockchain-data-container ${loading && 'loading'}`}>
-        {blockchainData?.length > 0 &&
-          blockchainData?.map((data, index) => {
-            return (
-              <div key={index} className="blockchain-data-div">
-                <h3>
-                  <a href={data?.url} target="_blank" rel="noreferrer">
-                    {data?.name}
-                  </a>
-                </h3>
-                <p>
-                  Calculated Value:{' '}
-                  <b>
-                    {data?.holdingsToken} {data?.symbol}
-                  </b>
-                  <span className="shade">
-                    {' '}
-                    / {data?.holdingsUSD} <b>USD</b>
-                  </span>
-                </p>
-              </div>
-            );
-          })}
+        {(error && <Error />) ||
+          (blockchainData?.length > 0 &&
+            blockchainData?.map((data, index) => {
+              return (
+                <div key={index} className="blockchain-data-div">
+                  <h3>
+                    <a href={data?.url} target="_blank" rel="noreferrer">
+                      {data?.name}
+                    </a>
+                  </h3>
+                  <p>
+                    Calculated Value:{' '}
+                    <b>
+                      {data?.holdingsToken} {data?.symbol}
+                    </b>
+                    <span className="shade">
+                      {' '}
+                      / {data?.holdingsUSD} <b>USD</b>
+                    </span>
+                  </p>
+                </div>
+              );
+            }))}
       </div>
     </StyledMainLayout>
   );
