@@ -44,7 +44,6 @@ const blockscan_apis = [
     key: '8VZWTE1Q32D3FDURSE3JKW7W7T8WYTTRUX',
   },
 ];
-const cardano_api_key = '';
 const wei = 1000000000000000000;
 
 // TODO: maybe call this on every page so it starts loading as soon as you hit the site
@@ -70,6 +69,7 @@ const handler = async (req, res) => {
 const getBlockchainData = async (address) => {
   const tokenInfo = [];
 
+  // blockscan apis
   for (const chain of blockscan_apis) {
     const { name, symbol, baseUrl, key } = chain;
     const url = `${baseUrl}module=account&action=balance&address=${address}&tag=latest&apiKey=${key}`;
@@ -94,8 +94,6 @@ const getBlockchainData = async (address) => {
 
   return tokenInfo.length > 0 ? tokenInfo : false;
 };
-
-const getCardanoData = async (address) => {};
 
 const scrapeBlockscanData = async (address) => {
   console.log('No APIs found, scrapping...');
