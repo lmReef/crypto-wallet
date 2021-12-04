@@ -55,8 +55,8 @@ const handler = async (req, res) => {
   let data = {};
 
   data =
+    (await scrapeBlockscanData(address)) ||
     (await getBlockchainData(address)) ||
-    // (await scrapeBlockscanData(address)) ||
     {};
 
   res.setHeader('Cache-Control', 'public, max-age=900, immutable'); // cache the response for 15 minutes
@@ -64,6 +64,7 @@ const handler = async (req, res) => {
   res.status(200).json(data);
 };
 
+// api version
 const getBlockchainData = async (address) => {
   const tokenInfo = [];
 
@@ -93,8 +94,9 @@ const getBlockchainData = async (address) => {
   return tokenInfo.length > 0 ? tokenInfo : false;
 };
 
+// scraping version
 const scrapeBlockscanData = async (address) => {
-  console.log('No APIs found, scrapping...');
+  // console.log('No APIs found, scrapping...');
   const blockscan = 'https://blockscan.com/address/';
 
   // fetch the page
@@ -134,15 +136,26 @@ const scrapeBlockscanData = async (address) => {
         : link.match('ada')
         ? 'ADA'
         : '';
-      const name = `${await (await page.title()).split(' ')[0]} - ${address}`;
 
-      tokenInfo.push({
-        name,
-        symbol,
-        holdingsUSD: await page.$eval('#HoldingsUSD', (el) => el.textContent),
-        holdingsToken: await page.$eval('#HoldingsETH', (el) => el.textContent),
-        url: links[i],
-      });
+      const name = `${await (await page.title()).split(' ')[0]} - ${address}`;
+      const holdingsUSD = await page.$eval(
+        '#HoldingsUSD',
+        (el) => el.textContent,
+      );
+      const holdingsToken = await page.$eval(
+        '#HoldingsETH',
+        (el) => el.textContent,
+      );
+
+      if (holdingsUSD !== '-') {
+        tokenInfo.push({
+          name,
+          symbol,
+          holdingsUSD,
+          holdingsToken,
+          url: links[i],
+        });
+      }
     }
   } catch (e) {
     console.error(e);
