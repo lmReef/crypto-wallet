@@ -5,8 +5,8 @@ const scrollPageToBottom = require('puppeteer-autoscroll-down');
 const handler = async (req, res) => {
   const data = await scrapeCoinPrices();
 
-  // res.setHeader('Cache-Control', `public, max-age=1800, immutable`); // cache the response for 15 minutes
-  // res.setHeader('X-Cache', 'HIT');
+  res.setHeader('Cache-Control', `public, max-age=1800, immutable`); // cache the response for 30 minutes
+  res.setHeader('X-Cache', 'HIT');
   res.status(200).json(data);
 };
 

@@ -44,6 +44,7 @@ const blockscan_apis = [
     key: '8VZWTE1Q32D3FDURSE3JKW7W7T8WYTTRUX',
   },
 ];
+
 const wei = 1000000000000000000;
 
 // TODO: maybe call this on every page so it starts loading as soon as you hit the site
@@ -57,12 +58,9 @@ const handler = async (req, res) => {
     (await getBlockchainData(address)) ||
     // (await scrapeBlockscanData(address)) ||
     {};
-  // if (data === {}) data = await scrapeBlockscanData(address);
 
-  // if (address.contains('addr')) scrapedData = getCardanoUrls(address);
-
-  // res.setHeader('Cache-Control', 'public, max-age=900, immutable'); // cache the response for 15 minutes
-  // res.setHeader('X-Cache', 'HIT');
+  res.setHeader('Cache-Control', 'public, max-age=900, immutable'); // cache the response for 15 minutes
+  res.setHeader('X-Cache', 'HIT');
   res.status(200).json(data);
 };
 
