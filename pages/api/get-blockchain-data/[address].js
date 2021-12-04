@@ -76,7 +76,7 @@ const getBlockchainData = async (address) => {
     const data = await fetch(url).then((res) => {
       return res.json();
     });
-    console.log(name);
+
     if (data) {
       const { status, message } = data;
       const result = parseInt(data.result, 10);
