@@ -63,7 +63,7 @@ const Profile = () => {
     console.log('Address:', address);
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    const timeoutId = setTimeout(() => controller.abort(), 20000);
 
     const data = await fetch(`/api/get-blockchain-data/${address}`, {
       signal: controller.signal,

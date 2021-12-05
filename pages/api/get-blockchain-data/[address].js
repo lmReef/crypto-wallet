@@ -110,7 +110,7 @@ const scrapeBlockscanData = async (address) => {
     ); // some pages block headless agents so set this manually
 
     await page.goto(`${blockscan}${address}`);
-    await page.waitForSelector('a.search-result-list', { timeout: 5000 });
+    await page.waitForSelector('a.search-result-list', { timeout: 8000 });
 
     // scrape blockchain list
     const links = await page.$$eval('a.search-result-list', (els) => {
