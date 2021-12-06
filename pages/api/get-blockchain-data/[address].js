@@ -52,15 +52,14 @@ const handler = async (req, res) => {
   const { address } = req.query;
   const cardanoscan = 'https://cardanoscan.io/address/';
   const roninchain = 'https://explorer.roninchain.com/address/';
-  let data = {};
 
-  data =
-    (await scrapeBlockscanData(address)) ||
-    (await getBlockchainData(address)) ||
-    {};
+  const data = [
+    ...(await scrapeBlockscanData(address)),
+    // ...(await getBlockchainData(address)),
+  ];
 
-  res.setHeader('Cache-Control', 'public, max-age=900, immutable'); // cache the response for 15 minutes
-  res.setHeader('X-Cache', 'HIT');
+  // res.setHeader('Cache-Control', 'public, max-age=900, immutable'); // cache the response for 15 minutes
+  // res.setHeader('X-Cache', 'HIT');
   res.status(200).json(data);
 };
 
@@ -96,7 +95,6 @@ const getBlockchainData = async (address) => {
 
 // scraping version
 const scrapeBlockscanData = async (address) => {
-  // console.log('No APIs found, scrapping...');
   const blockscan = 'https://blockscan.com/address/';
 
   // fetch the page
@@ -110,7 +108,7 @@ const scrapeBlockscanData = async (address) => {
     ); // some pages block headless agents so set this manually
 
     await page.goto(`${blockscan}${address}`);
-    await page.waitForSelector('a.search-result-list', { timeout: 8000 });
+    await page.waitForSelector('a.search-result-list', { timeout: 10000 });
 
     // scrape blockchain list
     const links = await page.$$eval('a.search-result-list', (els) => {
@@ -122,8 +120,6 @@ const scrapeBlockscanData = async (address) => {
     for (const i in links) {
       const link = links[i].replace('/address/', '/tokenholdings?a=');
       await page.goto(link, { waitUntil: 'networkidle0' });
-      await page.waitForSelector('#HoldingsUSD', { timeout: 5000 });
-      await page.waitForSelector('#HoldingsETH', { timeout: 5000 });
 
       const symbol = link.match('eth')
         ? 'ETH'
