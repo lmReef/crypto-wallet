@@ -101,14 +101,14 @@ const Profile = () => {
 
     if (!signer && typeof signer === 'undefined') signer = provider.getSigner();
 
-    async function checkMeta() {
-      if (isMetaMaskConnected()) {
+    const checkMeta = async () => {
+      if (await isMetaMaskConnected()) {
         const accounts = await ethereum.request({
           method: 'eth_requestAccounts',
         });
         setAccount(accounts[0]);
       }
-    }
+    };
     checkMeta();
   }, []);
 
@@ -120,6 +120,8 @@ const Profile = () => {
     <StyledMainLayout>
       {!installed ? (
         <RequireMetaMask />
+      ) : !account ? (
+        <p>Log in to MetaMask</p>
       ) : (
         <div className={`blockchain-data-container ${loading && 'loading'}`}>
           {(error && <Error />) ||

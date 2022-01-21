@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import MainLayout from '../components/layouts/MainLayout';
 import { breakpoints } from '../styles/shared';
@@ -14,30 +15,44 @@ const StyledMainLayout = styled(MainLayout)`
       margin: 2rem auto 0 auto;
     }
   }
-
-  .image-container {
-    max-width: 439px;
-    max-height: 566px;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    transform-origin: bottom right;
-
-    @media only screen and (max-width: ${breakpoints.lg}) {
-      scale: 0.8;
-    }
-  }
 `;
 
 // TODO: make dashboard page
 const Dashboard = ({ theme }) => {
+  const [coinData, setCoinData] = useState(null);
+
+  // get data on coins from the api
+  const getCoinData = async () => {
+    const d = await fetch('/api/get-coin-prices')
+      .then((res) => {
+        // setLoading(false);
+        return res.json();
+      })
+      .catch((e) => {
+        console.log(e);
+        return null;
+      });
+
+    return setCoinData(d[0]);
+  };
+
+  if (!coinData) getCoinData();
+
   return (
     <StyledMainLayout>
-      <div className="heading">have like coinmarketcap type info here</div>
-
-      {/* <div className="image-container">
-        <img src={'/images/fang.png'} alt="One of my dogs" />
-      </div> */}
+      <div className="coin-data-collection">
+        {coinData?.length > 0 ? (
+          coinData.map((coin, index) => {
+            return (
+              <div className="coin-data-item" key={index}>
+                <p>{`${coin.ranking}. ${coin.symbol} ${coin.name}: ${coin.price}`}</p>
+              </div>
+            );
+          })
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
     </StyledMainLayout>
   );
 };

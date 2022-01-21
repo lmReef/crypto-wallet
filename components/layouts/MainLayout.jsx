@@ -6,7 +6,7 @@ const Wrapper = styled.div`
   color: ${(props) => props.theme.Light};
   background-color: ${(props) => props.theme.Dark};
   min-height: 100vh;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 
   h1,
   h2,

@@ -50,7 +50,7 @@ const LoginButton = () => {
 
   const handleLogin = async () => {
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    console.log(accounts);
+    console.log('accounts', accounts);
     setAccount(accounts[0]);
     // const balance = await provider.getBalance('ethers.eth');
     // console.log('balance: ', balance);
